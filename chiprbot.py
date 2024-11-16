@@ -2,11 +2,12 @@ import telebot
 import random
 
 # Ваш токен бота
-API_TOKEN = '6276301682:AAGPI8XR39oh5_QSjjnwjGzcfzxPlfed-LQ'
+API_TOKEN = ''
 
 bot = telebot.TeleBot(API_TOKEN)
 
-alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ#Z@₽*!?£€$¢^°~`|•√π÷×§∆%✓{}"
+original_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+alphabet = original_alphabet
 shift = 0
 
 def create_key(shift, alphabet):
@@ -92,6 +93,13 @@ def encrypt_message(message):
     text_to_encrypt = message.text[len('/encrypt '):]
     encrypted_text = encrypt(text_to_encrypt, shift, alphabet)
     bot.reply_to(message, f"Зашифрованный текст: {encrypted_text}")
+
+@bot.message_handler(commands=['deshuffle'])
+def deshuffle_alphabet_command(message):
+    global alphabet
+    alphabet = original_alphabet
+    bot.reply_to(message, f"Алфавит возвращен в исходный порядок. Текущий алфавит: {alphabet}")
+
 
 @bot.message_handler(commands=['decrypt'])
 def decrypt_message(message):
